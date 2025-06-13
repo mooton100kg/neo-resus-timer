@@ -6,23 +6,41 @@
     body {
       font-family: sans-serif;
       text-align: center;
-      margin-top: 50px;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      user-select: none;
     }
     button {
       font-size: 24px;
-      padding: 20px 40px;
+      padding: 15px 30px;
       margin: 10px;
+      cursor: pointer;
+    }
+    #tapArea {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: none;
     }
   </style>
 </head>
 <body>
 
+  <div id="tapArea"></div>
+
   <h1>1-Minute Tap Test</h1>
-  <p>Tap the button or press any key to simulate a tap. Try to reach 90 taps in 1 minute.</p>
-  
-  <button id="tapButton" disabled>Tap Here</button>
+  <p>Click anywhere or press any key to tap. Try to reach 90 taps in 1 minute.</p>
+
   <p id="tapCount">Taps: 0</p>
   <p id="message"></p>
+
   <button id="startBtn">Begin 1-Minute Test</button>
   <button id="restartBtn" disabled>Restart</button>
 
@@ -31,11 +49,11 @@
     let timerStarted = false;
     let timerId = null;
 
-    const tapBtn = document.getElementById("tapButton");
-    const startBtn = document.getElementById("startBtn");
-    const restartBtn = document.getElementById("restartBtn");
     const tapDisplay = document.getElementById("tapCount");
     const message = document.getElementById("message");
+    const startBtn = document.getElementById("startBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const tapArea = document.getElementById("tapArea");
 
     function registerTap() {
       if (timerStarted) {
@@ -45,40 +63,39 @@
     }
 
     function endTest() {
-      tapBtn.disabled = true;
       timerStarted = false;
       message.textContent = `⏱ Time's up! You tapped ${tapCount} times.`;
       startBtn.disabled = true;
-      restartBtn.disabled = true;
+      restartBtn.disabled = false;
+      tapArea.style.display = "none";
     }
 
     function startTest() {
       tapCount = 0;
       timerStarted = true;
-      tapBtn.disabled = false;
+      tapArea.style.display = "block";
       tapDisplay.textContent = "Taps: 0";
       message.textContent = "";
       startBtn.disabled = true;
-      restartBtn.disabled = false;
+      restartBtn.disabled = true;
 
-      timerId = setTimeout(endTest, 60000); // 60 seconds
+      timerId = setTimeout(endTest, 60000); // 1 minute
     }
 
     function restartTest() {
       clearTimeout(timerId);
       tapCount = 0;
+      timerStarted = false;
       tapDisplay.textContent = "Taps: 0";
+      tapArea.style.display = "none";
       message.textContent = "";
-      tapBtn.disabled = true;
       startBtn.disabled = false;
       restartBtn.disabled = true;
-      timerStarted = false;
     }
 
-    tapBtn.onclick = registerTap;
-    document.addEventListener("keydown", function () {
-      if (timerStarted) registerTap();
-    });
+    // Allow taps by key or click anywhere
+    document.addEventListener("keydown", registerTap);
+    tapArea.addEventListener("click", registerTap);
 
     startBtn.onclick = startTest;
     restartBtn.onclick = restartTest;
