@@ -49,7 +49,7 @@
       timerStarted = false;
       message.textContent = `⏱ Time's up! You tapped ${tapCount} times.`;
       startBtn.disabled = true;
-      restartBtn.disabled = false;
+      restartBtn.disabled = true;
     }
 
     function startTest() {
@@ -59,7 +59,7 @@
       tapDisplay.textContent = "Taps: 0";
       message.textContent = "";
       startBtn.disabled = true;
-      restartBtn.disabled = true;
+      restartBtn.disabled = false;
 
       timerId = setTimeout(endTest, 60000); // 60 seconds
     }
