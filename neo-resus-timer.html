@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>1-Minute Tap Test</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    button {
+      font-size: 24px;
+      padding: 20px 40px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>1-Minute Tap Test</h1>
+  <p>Tap the button or press any key to simulate a tap. Try to reach 90 taps in 1 minute.</p>
+  
+  <button id="tapButton" disabled>Tap Here</button>
+  <p id="tapCount">Taps: 0</p>
+  <p id="message"></p>
+  <button id="startBtn">Begin 1-Minute Test</button>
+  <button id="restartBtn" disabled>Restart</button>
+
+  <script>
+    let tapCount = 0;
+    let timerStarted = false;
+    let timerId = null;
+
+    const tapBtn = document.getElementById("tapButton");
+    const startBtn = document.getElementById("startBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const tapDisplay = document.getElementById("tapCount");
+    const message = document.getElementById("message");
+
+    function registerTap() {
+      if (timerStarted) {
+        tapCount++;
+        tapDisplay.textContent = `Taps: ${tapCount}`;
+      }
+    }
+
+    function endTest() {
+      tapBtn.disabled = true;
+      timerStarted = false;
+      message.textContent = `⏱ Time's up! You tapped ${tapCount} times.`;
+      startBtn.disabled = true;
+      restartBtn.disabled = false;
+    }
+
+    function startTest() {
+      tapCount = 0;
+      timerStarted = true;
+      tapBtn.disabled = false;
+      tapDisplay.textContent = "Taps: 0";
+      message.textContent = "";
+      startBtn.disabled = true;
+      restartBtn.disabled = true;
+
+      timerId = setTimeout(endTest, 60000); // 60 seconds
+    }
+
+    function restartTest() {
+      clearTimeout(timerId);
+      tapCount = 0;
+      tapDisplay.textContent = "Taps: 0";
+      message.textContent = "";
+      tapBtn.disabled = true;
+      startBtn.disabled = false;
+      restartBtn.disabled = true;
+      timerStarted = false;
+    }
+
+    tapBtn.onclick = registerTap;
+    document.addEventListener("keydown", function () {
+      if (timerStarted) registerTap();
+    });
+
+    startBtn.onclick = startTest;
+    restartBtn.onclick = restartTest;
+  </script>
+
+</body>
+</html>
+
