@@ -19,6 +19,7 @@
       padding: 15px 30px;
       margin: 10px;
       cursor: pointer;
+      z-index: 1;
     }
     #tapArea {
       position: fixed;
@@ -66,7 +67,7 @@
       timerStarted = false;
       message.textContent = `⏱ Time's up! You tapped ${tapCount} times.`;
       startBtn.disabled = true;
-      restartBtn.disabled = false;
+      restartBtn.disabled = true;
       tapArea.style.display = "none";
     }
 
@@ -77,7 +78,7 @@
       tapDisplay.textContent = "Taps: 0";
       message.textContent = "";
       startBtn.disabled = true;
-      restartBtn.disabled = true;
+      restartBtn.disabled = false;
 
       timerId = setTimeout(endTest, 60000); // 1 minute
     }
