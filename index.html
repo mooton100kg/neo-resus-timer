@@ -30,6 +30,21 @@
       z-index: 0;
       display: none;
     }
+    #cat-jumping {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 35%;
+      display: none;
+    }
+    #cat-sad {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 25%;
+      transform: scale(-1, 1);
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -44,6 +59,8 @@
 
   <button id="startBtn">Begin 1-Minute Test</button>
   <button id="restartBtn" disabled>Restart</button>
+  <img src="cat-jumping.gif" alt="cat-jumping.gif" id="cat-jumping">
+  <img src="cat-sad.gif" alt="cat-sad.gif" id="cat-sad">
 
   <script>
     let tapCount = 0;
@@ -55,6 +72,8 @@
     const startBtn = document.getElementById("startBtn");
     const restartBtn = document.getElementById("restartBtn");
     const tapArea = document.getElementById("tapArea");
+    const catsad = document.getElementById("cat-sad");
+    const catjumping = document.getElementById("cat-jumping");
 
     function registerTap() {
       if (timerStarted) {
@@ -66,9 +85,19 @@
     function endTest() {
       timerStarted = false;
       message.textContent = `⏱ Time's up! You tapped ${tapCount} times.`;
-      startBtn.disabled = true;
+      startBtn.disabled = false;
       restartBtn.disabled = true;
       tapArea.style.display = "none";
+
+      if (tapCount > 85 && tapCount < 95) {
+        catjumping.style.display = "block";      
+	setTimeout(() => {catjumping.style.display = "none";}, 5000);
+
+      }
+      else {
+        catsad.style.display = "block";
+	setTimeout(() => {catsad.style.display = "none";}, 5000);
+      }
     }
 
     function startTest() {
